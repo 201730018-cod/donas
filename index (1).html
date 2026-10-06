@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Invitación a las Donas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=IM+Fell+English:ital@0;1&family=Pinyon+Script&display=swap">
+<style>
+  /* Layout: one centered stage over a starry night; each step is a parchment that replaces the last. Single committed dark world. */
+  :root {
+    --night: #0c1222;
+    --night-2: #1b2443;
+    --parch: #f2e5c4;
+    --parch-edge: #d6bb85;
+    --ink: #2a1c10;
+    --ink-soft: #6a5840;
+    --wax: #8c1d22;
+    --wax-hi: #b8343a;
+    --gold: #d6b05c;
+    --display: "Cinzel Decorative", "Trajan Pro", Georgia, serif;
+    --body: "IM Fell English", Garamond, Georgia, serif;
+    --script: "Pinyon Script", "Snell Roundhand", cursive;
+    color-scheme: dark;
+  }
+  html, body { min-height: 100%; }
+  body {
+    background: radial-gradient(ellipse at 50% 0%, var(--night-2), var(--night) 70%) fixed, var(--night);
+    color: var(--parch);
+    font-family: var(--body);
+    font-size: 18px;
+    line-height: 1.55;
+    padding-inline: 16px;
+    padding-block: 32px;
+    overflow-x: hidden;
+  }
+  #cielo { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+  main {
+    position: relative; z-index: 1;
+    max-width: 560px; margin: 0 auto;
+    min-height: calc(100vh - 64px);
+    display: grid; place-items: center;
+  }
+  .escena { width: 100%; display: grid; justify-items: center; gap: 20px; }
+
+  /* ---------- Sobre ---------- */
+  .sobre {
+    position: relative; width: min(100%, 420px); aspect-ratio: 3 / 2;
+    background: linear-gradient(170deg, var(--parch), var(--parch-edge));
+    border-radius: 6px;
+    box-shadow: 0 24px 60px rgb(0 0 0 / .55), inset 0 0 40px rgb(120 80 30 / .25);
+    perspective: 900px;
+    animation: flotar 4s ease-in-out infinite;
+  }
+  .sobre::before {
+    content: ""; position: absolute; inset: 0; border-radius: 6px;
+    background: linear-gradient(170deg, #e4cf9b, #ccae72);
+    clip-path: polygon(0 100%, 50% 48%, 100% 100%);
+  }
+  .solapa {
+    position: absolute; inset: 0 0 auto 0; height: 60%; z-index: 2;
+    background: linear-gradient(180deg, #ead8aa, #d4b87e);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform .8s cubic-bezier(.6, .05, .3, 1);
+  }
+  .sobre.abierto { animation: none; }
+  .sobre.abierto .solapa { transform: rotateX(180deg); }
+  .destinatario {
+    position: absolute; left: 0; right: 0; bottom: 9%; z-index: 1;
+    text-align: center; color: var(--ink); font-style: italic; font-size: 15px; line-height: 1.35;
+  }
+  .destinatario strong { font-family: var(--script); font-style: normal; font-weight: 400; font-size: 30px; display: block; color: var(--ink); }
+  .sello {
+    position: absolute; left: 50%; top: 60%; z-index: 3;
+    width: 88px; height: 88px; transform: translate(-50%, -50%);
+    border: 0; border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%;
+    background: radial-gradient(circle at 35% 30%, var(--wax-hi), var(--wax) 60%, #5e1013);
+    box-shadow: 0 4px 10px rgb(0 0 0 / .4), inset 0 -3px 6px rgb(0 0 0 / .35);
+    cursor: pointer; display: grid; place-items: center;
+    transition: transform .3s, opacity .4s;
+  }
+  .sello:hover { transform: translate(-50%, -50%) scale(1.06) rotate(-4deg); }
+  .sello:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+  .sello svg { width: 54px; height: 54px; }
+  .sobre.abierto .sello { opacity: 0; transform: translate(-50%, -50%) scale(.6); pointer-events: none; }
+  .pista { font-style: italic; color: var(--gold); letter-spacing: .02em; text-align: center; }
+
+  /* ---------- Pergamino ---------- */
+  .pergamino {
+    position: relative; width: 100%;
+    background:
+      radial-gradient(ellipse at center, transparent 55%, rgb(150 105 45 / .28)),
+      linear-gradient(175deg, var(--parch), #ead9b0);
+    color: var(--ink);
+    padding: clamp(24px, 6vw, 44px);
+    border-radius: 3px;
+    box-shadow: 0 30px 70px rgb(0 0 0 / .6);
+    animation: subir .9s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  .membrete { text-align: center; display: grid; gap: 4px; margin-bottom: 22px; }
+  .membrete .ornamento { color: var(--wax); letter-spacing: .5em; font-size: 14px; }
+  .membrete h1 {
+    font-family: var(--display); font-weight: 700; font-size: clamp(17px, 4.4vw, 22px);
+    line-height: 1.25; margin: 0; text-wrap: balance; color: var(--ink);
+  }
+  .membrete .sub { font-style: italic; color: var(--ink-soft); font-size: 15px; }
+  .pergamino p { margin: 0 0 14px; }
+  .saludo { font-style: italic; }
+  .pregunta {
+    font-family: var(--display); font-weight: 700; text-align: center;
+    font-size: clamp(22px, 6vw, 30px); line-height: 1.2; color: var(--wax);
+    margin: 22px 0 18px; text-wrap: balance;
+  }
+  .botones { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; min-height: 56px; }
+  .btn {
+    font-family: var(--display); font-weight: 700; font-size: 16px; letter-spacing: .04em;
+    padding: 12px 26px; border-radius: 999px; cursor: pointer;
+    border: 2px solid var(--wax); transition: transform .15s, background .2s, left .28s ease, top .28s ease;
+  }
+  .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .btn-si { background: var(--wax); color: var(--parch); box-shadow: 0 6px 16px rgb(140 29 34 / .35); }
+  .btn-si:hover { background: var(--wax-hi); transform: translateY(-2px); }
+  .btn-no { background: transparent; color: var(--wax); }
+  .btn-no.huyendo { position: fixed; z-index: 10; background: var(--parch); }
+  .aviso { min-height: 1.6em; text-align: center; font-style: italic; color: var(--wax); margin: 12px 0 0; }
+  .materiales {
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid rgb(42 28 16 / .2);
+    font-size: 15px; color: var(--ink-soft); display: grid; gap: 4px;
+  }
+  .materiales b { color: var(--ink); font-weight: 400; font-variant: small-caps; letter-spacing: .05em; }
+  .firma { margin-top: 20px; text-align: right; }
+  .firma .nombre { font-family: var(--script); font-size: 38px; line-height: 1; color: var(--ink); }
+  .firma .cargo { font-style: italic; font-size: 14px; color: var(--ink-soft); }
+
+  /* ---------- Formulario ---------- */
+  form { display: grid; gap: 20px; }
+  fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; min-width: 0; }
+  legend, label.etq {
+    font-variant: small-caps; letter-spacing: .08em; font-size: 17px; color: var(--ink); padding: 0; margin-bottom: 6px;
+  }
+  input[type="date"], select, textarea {
+    font-family: var(--body); font-size: 17px; color: var(--ink);
+    background: rgb(255 250 235 / .7); border: 1px solid var(--parch-edge);
+    border-bottom: 2px solid var(--ink-soft);
+    border-radius: 4px; padding: 10px 12px; width: 100%; color-scheme: light;
+  }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--wax); outline-offset: 1px; }
+  textarea { resize: vertical; min-height: 70px; }
+  .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .fila > div { display: grid; gap: 2px; min-width: 0; }
+  @media (max-width: 440px) { .fila { grid-template-columns: 1fr; } }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips label { position: relative; }
+  .chips input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .chips span {
+    display: inline-block; padding: 7px 14px; border-radius: 999px;
+    border: 1px solid var(--ink-soft); font-size: 16px; color: var(--ink);
+    background: rgb(255 250 235 / .5); transition: background .15s, color .15s;
+  }
+  .chips input:checked + span { background: var(--wax); border-color: var(--wax); color: var(--parch); }
+  .chips input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .error { color: var(--wax); font-style: italic; font-size: 15px; margin: 0; min-height: 1.4em; }
+
+  /* ---------- Final ---------- */
+  .resumen { display: grid; gap: 10px; margin: 6px 0 22px; }
+  .resumen div { display: grid; grid-template-columns: 7.5em 1fr; gap: 10px; border-bottom: 1px dotted rgb(42 28 16 / .3); padding-bottom: 8px; }
+  .resumen dt { font-variant: small-caps; letter-spacing: .06em; color: var(--ink-soft); }
+  .resumen dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+  .acciones { display: grid; justify-items: center; gap: 14px; }
+  a.btn { text-decoration: none; display: inline-block; text-align: center; }
+  .respaldo { margin-top: 22px; font-size: 15px; color: var(--ink-soft); display: grid; gap: 8px; }
+  .respaldo pre {
+    margin: 0; white-space: pre-wrap; font-family: var(--body); font-size: 15px; color: var(--ink);
+    background: rgb(255 250 235 / .6); border: 1px dashed var(--ink-soft); border-radius: 4px; padding: 12px;
+  }
+  .btn-chico { font-size: 13px; padding: 8px 16px; justify-self: start; }
+
+  @keyframes flotar { 50% { transform: translateY(-10px) rotate(-1deg); } }
+  @keyframes subir { from { opacity: 0; transform: translateY(40px) scale(.97); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .sobre, .pergamino { animation: none; }
+    .solapa, .btn { transition: none; }
+  }
+</style>
+
+</head>
+<body>
+<canvas id="cielo" aria-hidden="true"></canvas>
+
+<main>
+  <!-- 1. Sobre -->
+  <section class="escena" id="escena-sobre">
+    <div class="sobre" id="sobre">
+      <div class="solapa"></div>
+      <button class="sello" id="sello" aria-label="Romper el sello y abrir la carta">
+        <svg viewBox="0 0 60 60" aria-hidden="true">
+          <circle cx="30" cy="30" r="26" fill="none" stroke="#5e1013" stroke-width="2" opacity=".6"/>
+          <circle cx="30" cy="30" r="15" fill="none" stroke="#e9a3a6" stroke-width="7" opacity=".35"/>
+          <circle cx="30" cy="30" r="15" fill="none" stroke="#4a0c0f" stroke-width="1.2" stroke-dasharray="2 4" opacity=".7"/>
+          <circle cx="30" cy="30" r="5" fill="#5e1013" opacity=".55"/>
+        </svg>
+      </button>
+      <div class="destinatario">
+        <strong id="para-sobre">Para ti</strong>
+        Habitación de la ventana con más estrellas
+      </div>
+    </div>
+    <p class="pista">Ha llegado una lechuza con esto para ti. Toca el sello.</p>
+  </section>
+
+  <!-- 2. Carta -->
+  <section class="escena" id="escena-carta" hidden>
+    <article class="pergamino">
+      <header class="membrete">
+        <span class="ornamento">✦ ✦ ✦</span>
+        <h1>Colegio de Artes Mágicas y Repostería Encantada</h1>
+        <span class="sub">Departamento de Antojos y Citas Importantes</span>
+      </header>
+      <p class="saludo">Estimada <span id="para-carta">señorita</span>:</p>
+      <p>Nos complace informarle que ha sido seleccionada para una misión de la más alta importancia. Tras observar sus extraordinarias aptitudes para la magia, y su talento para robarle sonrisas a cierto programador, el comité le extiende la siguiente invitación:</p>
+      <p class="pregunta">¿Te gustaría ir por unas donas conmigo?</p>
+      <div class="botones">
+        <button class="btn btn-si" id="btn-si" type="button">Sí, acepto</button>
+        <button class="btn btn-no" id="btn-no" type="button">No</button>
+      </div>
+      <p class="aviso" id="aviso" aria-live="polite"></p>
+      <div class="materiales">
+        <span><b>Material requerido:</b> una varita (opcional), mucho apetito y tu sonrisa.</span>
+        <span><b>Fecha límite de respuesta:</b> antes de que se enfríen las donas.</span>
+      </div>
+      <div class="firma">
+        <div class="nombre" id="de-carta">Jack</div>
+        <div class="cargo">Subdirector de Antojos Mágicos</div>
+      </div>
+    </article>
+  </section>
+
+  <!-- 3. Detalles -->
+  <section class="escena" id="escena-detalles" hidden>
+    <article class="pergamino">
+      <header class="membrete">
+        <span class="ornamento">✦ ✦ ✦</span>
+        <h1>Detalles de la Misión</h1>
+        <span class="sub">Llena este pergamino con tu mejor letra</span>
+      </header>
+      <form id="form" novalidate>
+        <div class="fila">
+          <div>
+            <label class="etq" for="fecha">Día</label>
+            <input type="date" id="fecha" required>
+          </div>
+          <div>
+            <label class="etq" for="hora">Hora</label>
+            <select id="hora">
+              <option>4:00 pm</option>
+              <option>5:00 pm</option>
+              <option selected>6:00 pm</option>
+              <option>7:00 pm</option>
+              <option>8:00 pm</option>
+            </select>
+          </div>
+        </div>
+        <fieldset>
+          <legend>Tu dona favorita</legend>
+          <div class="chips">
+            <label><input type="radio" name="dona" id="dona-1" value="Glaseada clásica" checked><span>Glaseada clásica</span></label>
+            <label><input type="radio" name="dona" id="dona-2" value="Chocolate"><span>Chocolate</span></label>
+            <label><input type="radio" name="dona" id="dona-3" value="Rellena de fresa"><span>Rellena de fresa</span></label>
+            <label><input type="radio" name="dona" id="dona-4" value="Con chispas de colores"><span>Con chispas</span></label>
+            <label><input type="radio" name="dona" id="dona-5" value="Una de cada una"><span>Una de cada una</span></label>
+          </div>
+        </fieldset>
+        <div>
+          <label class="etq" for="nota">Un mensaje para el mago (opcional)</label>
+          <textarea id="nota" placeholder="Paso por ti, ¿verdad?"></textarea>
+        </div>
+        <p class="error" id="error" aria-live="polite"></p>
+        <div class="botones">
+          <button class="btn btn-si" type="submit">Sellar pergamino</button>
+        </div>
+      </form>
+    </article>
+  </section>
+
+  <!-- 4. Final -->
+  <section class="escena" id="escena-final" hidden>
+    <article class="pergamino">
+      <header class="membrete">
+        <span class="ornamento">✦ ✦ ✦</span>
+        <h1>¡Misión Aceptada!</h1>
+        <span class="sub">El comité celebra su sabia decisión</span>
+      </header>
+      <dl class="resumen" id="resumen"></dl>
+      <div class="acciones">
+        <a class="btn btn-si" id="btn-whats" href="#" target="_blank" rel="noopener">Enviar por lechuza (WhatsApp)</a>
+        <button class="btn btn-no" id="btn-editar" type="button">Cambiar algo</button>
+      </div>
+      <div class="respaldo">
+        <span>Si la lechuza se pierde en el camino, copia esto y mándamelo:</span>
+        <pre id="texto-msg"></pre>
+        <button class="btn btn-no btn-chico" id="btn-copiar" type="button">Copiar mensaje</button>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script>
+  /* ====== EDITA ESTO ====== */
+  const CONFIG = {
+    para: "Mi bruja favorita",     // cómo se llama ella (o un apodo)
+    de: "Jack",                    // tu nombre para la firma
+    whatsapp: "52XXXXXXXXXX"       // tu número: 52 + 10 dígitos, sin espacios ni +
+  };
+  /* ======================== */
+
+  const $ = (id) => document.getElementById(id);
+  $("para-sobre").textContent = CONFIG.para;
+  $("para-carta").textContent = CONFIG.para;
+  $("de-carta").textContent = CONFIG.de;
+
+  const reducir = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function mostrar(id) {
+    ["escena-sobre", "escena-carta", "escena-detalles", "escena-final"].forEach(e => $(e).hidden = e !== id);
+    window.scrollTo({ top: 0, behavior: reducir ? "auto" : "smooth" });
+  }
+
+  /* ---------- Cielo estrellado + chispas ---------- */
+  const cv = $("cielo"), ctx = cv.getContext("2d");
+  let W, H, estrellas = [], chispas = [];
+  function ajustar() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(W * H / 6000);
+    estrellas = Array.from({ length: n }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.3 + .3, f: Math.random() * Math.PI * 2, v: Math.random() * .02 + .005
+    }));
+  }
+  function chispazo(x, y, n = 70) {
+    if (reducir) return;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2, s = Math.random() * 5 + 1.5;
+      chispas.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 2, vida: 1, r: Math.random() * 2.5 + 1 });
+    }
+  }
+  function dibujar() {
+    ctx.clearRect(0, 0, W, H);
+    for (const e of estrellas) {
+      e.f += reducir ? 0 : e.v;
+      ctx.globalAlpha = .35 + Math.sin(e.f) * .3 + .3;
+      ctx.fillStyle = "#f2e5c4";
+      ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2); ctx.fill();
+    }
+    for (let i = chispas.length - 1; i >= 0; i--) {
+      const c = chispas[i];
+      c.x += c.vx; c.y += c.vy; c.vy += .12; c.vx *= .98; c.vida -= .014;
+      if (c.vida <= 0) { chispas.splice(i, 1); continue; }
+      ctx.globalAlpha = c.vida;
+      ctx.fillStyle = i % 3 ? "#d6b05c" : "#fff3c9";
+      ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(dibujar);
+  }
+  addEventListener("resize", ajustar);
+  ajustar(); dibujar();
+
+  /* ---------- Abrir sobre ---------- */
+  $("sello").addEventListener("click", (ev) => {
+    const r = ev.currentTarget.getBoundingClientRect();
+    chispazo(r.left + r.width / 2, r.top + r.height / 2, 40);
+    $("sobre").classList.add("abierto");
+    setTimeout(() => mostrar("escena-carta"), reducir ? 0 : 900);
+  });
+
+  /* ---------- El "No" encantado ---------- */
+  const avisos = [
+    "¡Ese botón tiene un encantamiento!",
+    "Ups, parece que el botón se desapareció.",
+    "Ni con un hechizo convocador lo vas a atrapar.",
+    "El comité de magos no acepta un no.",
+    "Última oportunidad de cambiar de opinión..."
+  ];
+  let intentos = 0, convertido = false;
+  const no = $("btn-no");
+
+  let ultimo = 0;
+  function huir() {
+    if (convertido) return;
+    const ahora = Date.now();
+    if (ahora - ultimo < 350) return;
+    ultimo = ahora;
+    if (intentos >= avisos.length) {
+      convertido = true;
+      no.classList.remove("huyendo");
+      no.style.left = no.style.top = "";
+      no.textContent = "Bueno... sí";
+      no.classList.replace("btn-no", "btn-si");
+      $("aviso").textContent = "El botón se rindió. Sabía que dirías que sí.";
+      return;
+    }
+    const r = no.getBoundingClientRect();
+    if (!no.classList.contains("huyendo")) {
+      no.style.left = r.left + "px"; no.style.top = r.top + "px";
+      no.classList.add("huyendo");
+      no.offsetWidth;
+    }
+    const m = 16;
+    let x, y, tries = 0;
+    do {
+      x = m + Math.random() * (innerWidth - r.width - m * 2);
+      y = m + Math.random() * (innerHeight - r.height - m * 2);
+      tries++;
+    } while (Math.hypot(x - r.left, y - r.top) < 140 && tries < 20);
+    no.style.left = x + "px"; no.style.top = y + "px";
+    $("aviso").textContent = avisos[intentos++];
+  }
+  no.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") huir(); });
+  no.addEventListener("pointerdown", (e) => { if (!convertido) { e.preventDefault(); huir(); } });
+  no.addEventListener("click", (e) => { if (convertido) aceptar(e); else huir(); });
+
+  function aceptar(e) {
+    const r = e.currentTarget.getBoundingClientRect();
+    chispazo(r.left + r.width / 2, r.top + r.height / 2, 110);
+    no.classList.remove("huyendo");
+    setTimeout(() => mostrar("escena-detalles"), reducir ? 0 : 700);
+  }
+  $("btn-si").addEventListener("click", aceptar);
+
+  /* ---------- Formulario ---------- */
+  const hoy = new Date();
+  const iso = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  $("fecha").min = iso(hoy);
+
+  let mensaje = "";
+  $("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const fecha = $("fecha").value;
+    if (!fecha) { $("error").textContent = "Falta elegir el día. Hasta los magos necesitan agenda."; $("fecha").focus(); return; }
+    $("error").textContent = "";
+
+    const dia = new Date(fecha + "T12:00").toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
+    const datos = [
+      ["Día", dia],
+      ["Hora", $("hora").value],
+      ["Mi dona", document.querySelector('input[name="dona"]:checked').value]
+    ];
+    const nota = $("nota").value.trim();
+    if (nota) datos.push(["Mensaje", nota]);
+
+    $("resumen").innerHTML = "";
+    for (const [k, v] of datos) {
+      const d = document.createElement("div");
+      const dt = document.createElement("dt"); dt.textContent = k;
+      const dd = document.createElement("dd"); dd.textContent = v;
+      d.append(dt, dd); $("resumen").append(d);
+    }
+
+    mensaje = "🦉 Respuesta oficial a tu invitación 🍩\n¡Acepto ir por donas contigo!\n\n"
+      + datos.map(([k, v]) => `${k}: ${v}`).join("\n");
+    $("texto-msg").textContent = mensaje;
+    $("btn-whats").href = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(mensaje)}`;
+
+    mostrar("escena-final");
+    setTimeout(() => chispazo(innerWidth / 2, innerHeight / 3, 120), 300);
+  });
+
+  $("btn-editar").addEventListener("click", () => mostrar("escena-detalles"));
+
+  $("btn-copiar").addEventListener("click", async () => {
+    const b = $("btn-copiar");
+    try {
+      await navigator.clipboard.writeText(mensaje);
+      b.textContent = "¡Copiado!";
+    } catch {
+      const sel = getSelection(), rango = document.createRange();
+      rango.selectNodeContents($("texto-msg"));
+      sel.removeAllRanges(); sel.addRange(rango);
+      b.textContent = "Texto seleccionado, cópialo";
+    }
+    setTimeout(() => b.textContent = "Copiar mensaje", 2200);
+  });
+</script>
+
+</body>
+</html>
